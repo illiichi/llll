@@ -18,6 +18,9 @@
 (defmethod convert-to-clay-action 'synth [[_ sym]]
   `(action/make-func-for-play-sound ~sym ~'--sound-bus--))
 
+(defmethod convert-to-clay-action 'control [[_ line-key arg-key]]
+  `(action/make-func-for-control-param ~line-key ~arg-key))
+
 (defn- create-symbol-table-exp [line-key table]
   `(let [~'--sound-bus-- (snd/sound-bus ~line-key)]
      ~(map-values convert-to-clay-action table)))

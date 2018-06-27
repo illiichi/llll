@@ -101,7 +101,7 @@
    (pattern '[:rest]
             (fn [context dur] {:emit (->Rest (if (vector? dur) (first dur) 1))}))])
 
-(defn- parse [inputs]
+(defn parse [inputs]
   (letfn [(step [context inputs state-seq]
             (loop [[pattern-checker & rest-patterns] patterns]
               (when pattern-checker

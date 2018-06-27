@@ -3,6 +3,7 @@
            [llll.clay.clay :as c]
            [llll.sc.clay-action :as a]
            [llll.sc.sound-control :as snd]
+           [llll.clay.transition-dsl :as tr]
            [overtone.sc.bus :as ot-bus]))
 
 (defn control [line-key param-key {:keys [dur from to set]}]
@@ -20,4 +21,8 @@
        (c/burn {:symbol-table {:x (a/make-func-for-control-param line-key param-key)}}
                dur
                (c/create-clay :x param))))))
+
+
+(defmacro --> [clay & transitions]
+  `(tr/assign-transition ~(tr/parse transitions) ~clay))
 
