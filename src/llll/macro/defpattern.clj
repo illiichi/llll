@@ -8,8 +8,12 @@
 
 (intern *ns* (with-meta 'defsynth-l4 {:macro true}) @#'llll.sc.synth/define-common-synth)
 (intern *ns* (with-meta '| {:macro true}) @#'llll.clay.conversions/parse)
-(intern *ns* '=| @#'llll.clay.clay/assign)
 (intern *ns* '&| @#'llll.clay.clay/merge-clay)
+
+(defn =| [head & rest]
+  (if (keyword? head)
+    (apply llll.clay.clay/assign {:cycle? true} head rest )
+    (apply llll.clay.clay/assign (cons head rest))))
 
 (defn- map-values [f m]
   (reduce-kv (fn [acc k v] (into acc {k (f v)})) {} m))
