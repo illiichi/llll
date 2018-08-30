@@ -54,7 +54,7 @@
   (def out-sound-with-vol-control
     (synth/define-output-synth output-synth [input-bus -1 vol-bus -1]
       {:type :no-decoration}
-      (let [input-bus (ot-u/in:ar input-bus)
+      (let [input-bus (ot-u/in:ar input-bus 2)
             vol-bus (ot-u/in:kr vol-bus)]
         (ot-u/tanh (* input-bus vol-bus))))))
 
