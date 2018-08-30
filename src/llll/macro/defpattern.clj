@@ -9,6 +9,7 @@
 (intern *ns* (with-meta 'defsynth-l4 {:macro true}) @#'llll.sc.synth/define-common-synth)
 (intern *ns* (with-meta '| {:macro true}) @#'llll.clay.conversions/parse)
 (intern *ns* '&| @#'llll.clay.clay/merge-clay)
+(intern *ns* '+| @#'llll.clay.clay/concat-clay)
 
 (defn =| [head & rest]
   (if (keyword? head)
