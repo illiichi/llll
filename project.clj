@@ -8,5 +8,11 @@
                  [instaparse "1.4.9"]
                  [mount "0.1.12"]]
   ;; add per WARNING: JVM argument TieredStopAtLevel=1 is active...
-  :jvm-opts ^:replace [])
+  :jvm-opts ^:replace []
+  :repositories [["clojars" {:url "https://clojars.org/repo"
+                             :username [:env/clojars_username :gpg]
+                             :password [:env/clojars_password :gpg]}]]
+  :deploy-repositories  [["releases" :clojars]
+                         ["snapshots" :clojars]]
+  :signing {:gpg-key "868C4511"})
 
