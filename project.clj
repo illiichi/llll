@@ -1,4 +1,4 @@
-(defproject llll "0.1.0"
+(defproject llll "0.1.1"
   :description "A sound system which aims to explore all possible sound by computer with live coding"
   :url "http://github.com/illi-ichi/llll"
   :license {:name "MIT License"
