@@ -16,6 +16,7 @@
        (assoc :group g/long-life
               :out-bus 0
               :dur (* ~period v/*tick-interval-sec*))
+       (update :switch-dur #(* % v/*tick-interval-sec*))
        (update :fade-in-dur #(* % v/*tick-interval-sec*))
        (update :fade-out-dur #(* % v/*tick-interval-sec*))))
 
