@@ -24,6 +24,7 @@
 (defn finish []
   (en/stop-osc-client)
   (en/stop-osc-listener)
+  (en/refresh-lines)
   (mount/stop))
 
 (intern *ns* 'control #'llll.macro.control/control)
