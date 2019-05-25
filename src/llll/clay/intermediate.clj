@@ -1,5 +1,5 @@
 (ns llll.clay.intermediate
-  (require [llll.clay.clay-dsl-parser :as p]))
+  (:require [llll.clay.clay-dsl-parser :as p]))
 
 (defn ->Root
   ([] (->Root 0 []))

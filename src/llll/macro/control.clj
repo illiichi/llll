@@ -1,10 +1,10 @@
 (ns llll.macro.control
-  (require [llll.engine.engine :as en]
-           [llll.clay.clay :as c]
-           [llll.sc.clay-action :as a]
-           [llll.sc.sound-control :as snd]
-           [llll.clay.transition-dsl :as tr]
-           [overtone.sc.bus :as ot-bus]))
+  (:require [llll.engine.engine :as en]
+            [llll.clay.clay :as c]
+            [llll.sc.clay-action :as a]
+            [llll.sc.sound-control :as snd]
+            [llll.clay.transition-dsl :as tr]
+            [overtone.sc.bus :as ot-bus]))
 
 (defn control [line-key param-key {:keys [dur from to set]}]
   (assert (or (not (nil? set))

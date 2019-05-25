@@ -1,11 +1,11 @@
 (ns llll.core
-  (require [llll.engine.engine :as en]
-           [llll.sc.groups :as g]
-           [llll.engine.variables :as v]
-           [llll.sc.sound-control :as snd]
-           [llll.sc.synth :as syn]
-           [llll.macro.control]
-           [mount.core :as mount]))
+  (:require [llll.engine.engine :as en]
+            [llll.sc.groups :as g]
+            [llll.engine.variables :as v]
+            [llll.sc.sound-control :as snd]
+            [llll.sc.synth :as syn]
+            [llll.macro.control]
+            [mount.core :as mount]))
 
 (defn initialize [{:keys [bpm beat-per-osc ticks-per-beat osc-client osc-path]
                    :or {bpm 120

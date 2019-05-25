@@ -1,7 +1,7 @@
 (ns llll.clay.conversions
-  (require [llll.clay.clay :as c]
-           [llll.clay.intermediate :as im]
-           [llll.clay.clay-dsl-parser :as p]))
+  (:require [llll.clay.clay :as c]
+            [llll.clay.intermediate :as im]
+            [llll.clay.clay-dsl-parser :as p]))
 
 (defn- rest-sym? [sym]
   (= :- sym))

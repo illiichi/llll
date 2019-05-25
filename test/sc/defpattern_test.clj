@@ -1,7 +1,7 @@
 (ns sc.defpattern-test
-  (require [llll.core :as l4]
-           [llll.macro.defpattern :refer :all]
-           [llll.macro.control :refer :all]))
+  (:require [llll.core :as l4]
+            [llll.macro.defpattern :refer :all]
+            [llll.macro.control :refer :all]))
 
 (use 'overtone.core)
 (connect-external-server "localhost" 57110)

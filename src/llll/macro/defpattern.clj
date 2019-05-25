@@ -1,10 +1,10 @@
 (ns llll.macro.defpattern
-  (require [llll.clay.conversions :as conv]
-           [llll.clay.clay :as c]
-           [llll.sc.sound-control :as snd]
-           [llll.engine.model :as m]
-           [llll.sc.clay-action :as action]
-           [llll.macro.common :as common]))
+  (:require [llll.clay.conversions :as conv]
+            [llll.clay.clay :as c]
+            [llll.sc.sound-control :as snd]
+            [llll.engine.model :as m]
+            [llll.sc.clay-action :as action]
+            [llll.macro.common :as common]))
 
 (intern *ns* (with-meta 'defsynth-l4 {:macro true}) @#'llll.sc.synth/define-common-synth)
 (intern *ns* (with-meta '| {:macro true}) @#'llll.clay.conversions/parse)

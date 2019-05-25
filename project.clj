@@ -3,8 +3,8 @@
   :url "http://github.com/illi-ichi/llll"
   :license {:name "MIT License"
             :url "http://github.com/illi-ichi/llll/blob/master/LICENSE"}
-  :dependencies [[org.clojure/clojure "1.8.0"]
-                 [overtone            "0.10.3"]
+  :dependencies [[org.clojure/clojure "1.10.0"]
+                 [overtone            "0.10.6"]
                  [instaparse "1.4.9"]
                  [mount "0.1.12"]]
   ;; add per WARNING: JVM argument TieredStopAtLevel=1 is active...

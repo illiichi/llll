@@ -1,7 +1,7 @@
 (ns sc.defsound-test
-  (require [llll.core :as l4]
-           [llll.macro.defsound :refer :all]
-           [llll.macro.control :refer :all]))
+  (:require [llll.core :as l4]
+            [llll.macro.defsound :refer :all]
+            [llll.macro.control :refer :all]))
 
 (comment
  (use 'overtone.core)

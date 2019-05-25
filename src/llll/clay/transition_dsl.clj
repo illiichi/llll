@@ -1,5 +1,5 @@
 (ns llll.clay.transition-dsl
-  (require [llll.clay.clay :as c]))
+  (:require [llll.clay.clay :as c]))
 
 (defn value? [x]
   (or (list? x) (symbol? x) (number? x)))

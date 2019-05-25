@@ -1,10 +1,10 @@
 (ns llll.macro.common
-  (require [llll.engine.model :as m]
-           [llll.engine.variables :as v]
-           [llll.engine.engine :as en]
-           [llll.sc.groups :as g]
-           [llll.sc.sound-control :as ctl]
-           [llll.sc.node-switch :as sw]))
+  (:require [llll.engine.model :as m]
+            [llll.engine.variables :as v]
+            [llll.engine.engine :as en]
+            [llll.sc.groups :as g]
+            [llll.sc.sound-control :as ctl]
+            [llll.sc.node-switch :as sw]))
 
 (def ^:private default-swap-option {:fade-in-dur 0 :fade-out-dur 0 :switch-dur 0})
 
