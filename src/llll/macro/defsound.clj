@@ -50,7 +50,8 @@
 (defmacro defsound [name options body]
   (let [[state-keys options] (common/common-options (eval options))
         {:keys [keep-node? func-exp synths]} (sp/split-synth-body (keyword name) body)
-        synth-option (assoc (:synth-option options) :vol-bus `(snd/bus ~(keyword name) :vol))
+        synth-option (assoc (:synth-option options)
+                            :vol-bus `(snd/bus ~(keyword name) :vol))
         synths-exp (->> synths
                         (map #(assoc % :synth-name (make-synth-name name (:number %))))
                         (map (fn [{:keys [synth-name args-def exp]}]

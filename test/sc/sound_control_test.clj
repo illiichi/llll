@@ -27,7 +27,6 @@
   (en/stop-osc-listener)
 
   )
-
 (comment
   (syn/define-common-synth hoge
     [freq 440]
@@ -60,6 +59,18 @@
 
   (ctl n :fade-out-dur 4 :fade-out-gate 0))
 
+
+(comment
+  (defonce bus-1 (audio-bus))
+  (defsynth x [out-bus 0]
+    (out out-bus (sin-osc)))
+  (defsynth y [out-bus 0]
+    (out out-bus (in bus-1)))
+
+  (let [y-node (y)
+        x-node (x [:before y-node] bus-1)]
+    (prn "OK"))
+  (stop))
 
 (comment
   (syn/define-common-synth hoge2

@@ -1,6 +1,7 @@
 (ns llll.sc.sound-control
   (:require [overtone.sc.bus :as ot-bus]
             [overtone.sc.synth :as ot-synth]
+            [overtone.sc.node :as ot-node]
             [overtone.sc.ugens :as ot-u]
             [overtone.sc.cgens.env :as ot-env]
             [llll.engine.variables :as v]
@@ -9,6 +10,7 @@
 
 (defonce %buses (atom {}))
 (defonce %sound-buses (atom {}))
+(defonce %groups (atom {}))
 
 (defn- get-or-put-new [atom-m key create-func]
   (or (key (deref atom-m))
@@ -25,6 +27,16 @@
   [line-key]
   (let [bus-key (keyword (name line-key))]
     (get-or-put-new %sound-buses bus-key ot-bus/audio-bus)))
+
+
+(defn group
+  [line-key {:keys [position target] :as option}]
+  (let [group-key (keyword (name line-key))]
+    (if option
+      (let [target-group (get @%groups (keyword (name target))
+                              g/long-life)]
+        (get-or-put-new %groups group-key #(ot-node/group group-key position target-group)))
+      g/long-life)))
 
 (declare send-pulse)
 (declare line-to-bus)

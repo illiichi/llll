@@ -117,3 +117,6 @@
 
 (defn stop-osc-client []
   (at/stop-and-reset-pool! *osc-client-pool* :strategy :kill))
+
+(defn get-state [key]
+  (some-> @%lines key :state))

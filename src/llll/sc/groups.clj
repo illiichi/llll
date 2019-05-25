@@ -10,4 +10,3 @@
   :start (ot-node/group "long life nodes group" :after short-life)
   :stop (ot-node/group-free long-life))
 
-
