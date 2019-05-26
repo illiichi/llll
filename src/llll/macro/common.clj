@@ -6,7 +6,11 @@
             [llll.sc.sound-control :as ctl]
             [llll.sc.node-switch :as sw]))
 
-(def ^:private default-swap-option {:fade-in-dur 0 :fade-out-dur 0 :switch-dur 0})
+(def ^:private default-swap-option
+  {:out-bus 0
+   :fade-in-dur 0
+   :fade-out-dur 0
+   :switch-dur 0})
 
 (defn- create-initial-state-exp [{:keys [initial]}]
   `(-> ~initial
@@ -14,8 +18,7 @@
 
 (defn- create-swap-option-exp [swap-option period]
   `(-> (merge ~default-swap-option ~swap-option)
-       (assoc :out-bus 0
-              :dur (* ~period v/*tick-interval-sec*))
+       (assoc :dur (* ~period v/*tick-interval-sec*))
        (update :switch-dur #(* % v/*tick-interval-sec*))
        (update :fade-in-dur #(* % v/*tick-interval-sec*))
        (update :fade-out-dur #(* % v/*tick-interval-sec*))))
@@ -29,6 +32,13 @@
 (defn- create-queue-gen-exp [arg-names body]
   `(fn [{:keys ~(conj arg-names 'node-holder)}] ~body))
 
+(defn- create-group-and-out-bus-exp [line-key group-position]
+  (if group-position
+    `{:group (ctl/group ~line-key ~group-position)
+      :out-bus (ctl/sound-bus ~line-key :out-bus)}
+    `{:group (ctl/group ~line-key nil)  ; nil の場合 g/long-lifeになる
+      :out-bus (ctl/sound-bus ~line-key :out-bus 0)}))
+
 (defn create-register-line-exp [name {:keys [group-position period state swap-option] :as options}
                                 state-keys
                                 queue-gen-body extra-exps]
@@ -36,7 +46,8 @@
         initial-state (create-initial-state-exp state)
         swap-option (create-swap-option-exp swap-option period)
         ]
-    `(let [~'--swap-option-- (assoc ~swap-option :group (ctl/group ~line-key ~group-position))]
+    `(let [~'--swap-option-- (merge ~swap-option
+                                    ~(create-group-and-out-bus-exp line-key group-position))]
        (en/register-line
         (-> (m/->Line ~line-key (m/->Queue 0 [])
                       ~(create-queue-gen-exp state-keys queue-gen-body)

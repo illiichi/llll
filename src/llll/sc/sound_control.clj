@@ -18,16 +18,23 @@
         (swap! atom-m #(assoc % key x))
         x)))
 
+(defn- put-force [atom-m key v]
+  (swap! atom-m #(assoc % key v))
+  v)
+
 (defn bus
   [line-key param-name]
   (let [bus-key (keyword (str (name line-key) "-" (name param-name)))]
     (get-or-put-new %buses bus-key ot-bus/control-bus)))
 
 (defn sound-bus
-  [line-key]
-  (let [bus-key (keyword (name line-key))]
-    (get-or-put-new %sound-buses bus-key ot-bus/audio-bus)))
-
+  ([line-key] (sound-bus line-key :self)) ; for defpattern
+  ([line-key param-name]
+   (let [bus-key (keyword (name line-key))]
+     (get-or-put-new %sound-buses bus-key #(ot-bus/audio-bus 2))))
+  ([line-key param-name v]
+   (let [bus-key (keyword (name line-key))]
+     (put-force %sound-buses bus-key v))))
 
 (defn group
   [line-key {:keys [position target] :as option}]
