@@ -22,11 +22,11 @@
 (defn- create-volume-wrapped-synth [exp]
   `(~'* ~'arg-vol ~exp))
 
-(defn- create-base-synth-exp [synth-name args-list exp ]
+(defn- create-base-synth-exp [synth-name args-list exp control-rate?]
   (let [args-list (vec (concat ['dur 0 'out-bus 0 'arg-vol 1] args-list))
         synth-exp (create-volume-wrapped-synth exp)]
     `(ot-synth/defsynth ~synth-name ~args-list
-       (ot-u/out ~'out-bus ~synth-exp))))
+       (~(if control-rate? `ot-u/out:kr `ot-u/out) ~'out-bus ~synth-exp))))
 
 (defn create-detune-synth-exp [amount body]
   `(map (fn [~'dr] ~body) [(- 1 ~amount) (+ 1 ~amount)]))
@@ -35,15 +35,16 @@
   `(~'* (ot-u/in:kr ~vol-bus-exp) ~body))
 
 (defmacro define-common-synth
-  ([synth-name args body] `(define-common-synth ~synth-name ~args {:type :normal} ~body))
-  ([synth-name args {:keys [type vol-bus] :as option} body]
+  ([synth-name args body]
+   `(define-common-synth ~synth-name ~args {:type :normal :control-rate? false} ~body))
+  ([synth-name args {:keys [type vol-bus control-rate?] :as option} body]
    (let [body (replace-special-symbol-for-synth body)
          body (case type
                 :normal body
                 :detune (create-detune-synth-exp (or (:amount option) 0.01) body))
          body (if vol-bus (enclose-vol-bus body vol-bus) body)
          ]
-     (create-base-synth-exp synth-name args body))))
+     (create-base-synth-exp synth-name args body control-rate?))))
 
 
 (defn create-fade-inout-synth-exp [body]
@@ -53,8 +54,10 @@
    ~body))
 
 (defmacro define-output-synth
-  ([synth-name arg-names body] `(define-output-synth ~synth-name ~arg-names {:type :normal} ~body))
-  ([synth-name args {:keys [type] :as option} body]
+  ([synth-name arg-names body]
+   `(define-output-synth ~synth-name ~arg-names {:type :normal
+                                                 :control-rate? false} ~body))
+  ([synth-name args {:keys [type control-rate?] :as option} body]
    (let [args (-> (concat ['fade-out-gate 1
                            'fade-in-dur 0
                            'fade-out-dur 0]
@@ -63,5 +66,5 @@
          body (-> body
                   (create-fade-inout-synth-exp))]
      (if (= type :no-decoration)
-       (create-base-synth-exp synth-name args body)
+       (create-base-synth-exp synth-name args body control-rate?)
        `(define-common-synth ~synth-name ~args ~option ~body)))))

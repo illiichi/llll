@@ -32,22 +32,25 @@
 (defn- create-queue-gen-exp [arg-names body]
   `(fn [{:keys ~(conj arg-names 'node-holder)}] ~body))
 
-(defn- create-group-and-out-bus-exp [line-key group-position]
-  (if group-position
-    `{:group (ctl/group ~line-key ~group-position)
-      :out-bus (ctl/sound-bus ~line-key :out-bus)}
-    `{:group (ctl/group ~line-key nil)  ; nil の場合 g/long-lifeになる
-      :out-bus (ctl/sound-bus ~line-key :out-bus 0)}))
+(defn- create-group-and-out-bus-exp [line-key group-position rate]
+  (let [create-bus (if (= :control rate) `ctl/bus `ctl/sound-bus)]
+    (if group-position
+      `{:group (ctl/group ~line-key ~group-position)
+        :out-bus (~create-bus ~line-key :out-bus)}
+      `{:group (ctl/group ~line-key nil) ; nil の場合 g/long-lifeになる
+        :out-bus (~create-bus ~line-key :out-bus 0)})))
 
-(defn create-register-line-exp [name {:keys [group-position period state swap-option] :as options}
-                                state-keys
-                                queue-gen-body extra-exps]
+(defn create-register-line-exp
+  [name {:keys [rate group-position period state swap-option] :as options}
+   state-keys
+   queue-gen-body extra-exps]
   (let [line-key (keyword name)
         initial-state (create-initial-state-exp state)
         swap-option (create-swap-option-exp swap-option period)
         ]
     `(let [~'--swap-option-- (merge ~swap-option
-                                    ~(create-group-and-out-bus-exp line-key group-position))]
+                                    ~(create-group-and-out-bus-exp
+                                      line-key group-position rate))]
        (en/register-line
         (-> (m/->Line ~line-key (m/->Queue 0 [])
                       ~(create-queue-gen-exp state-keys queue-gen-body)

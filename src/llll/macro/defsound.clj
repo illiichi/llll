@@ -51,6 +51,7 @@
   (let [[state-keys options] (common/common-options (eval options))
         {:keys [keep-node? func-exp synths]} (sp/split-synth-body (keyword name) body)
         synth-option (assoc (:synth-option options)
+                            :control-rate? (= (:rate options) :control)
                             :vol-bus `(snd/bus ~(keyword name) :vol))
         synths-exp (->> synths
                         (map #(assoc % :synth-name (make-synth-name name (:number %))))
