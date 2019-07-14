@@ -40,10 +40,21 @@
   [line-key {:keys [position target] :as option}]
   (let [group-key (keyword (name line-key))]
     (if option
-      (let [target-group (get @%groups (keyword (name target))
-                              g/long-life)]
-        (get-or-put-new %groups group-key #(ot-node/group group-key position target-group)))
+      (let [new-group-func (if target
+                             (fn [] (ot-node/group (name line-key) position
+                                             (->> target name keyword (get @%groups))))
+                             (fn [] (ot-node/group (name line-key))))]
+        (get-or-put-new %groups group-key new-group-func))
       g/long-life)))
+
+(defn common-group [no]
+  (group (keyword (str "common-" no)) (if (= no 0) {}
+                                          {:position :before
+                                           :target (str "common-" (dec no))})))
+
+(defn create-common-group [max]
+  (doseq [no (range (inc max))]
+    (common-group no)))
 
 (declare send-pulse)
 (declare line-to-bus)
@@ -77,8 +88,9 @@
             vol-bus (ot-u/in:kr vol-bus)]
         (ot-u/tanh (* input-bus vol-bus))))))
 
+(def ^:dynamic *show-metronome* false)
 (defn send-global-pulse [current-time]
-  (println "metronome:" current-time)
+  (when *show-metronome* (println "metronome:" current-time))
   (send-pulse-synth))
 
 (defn make-out-node

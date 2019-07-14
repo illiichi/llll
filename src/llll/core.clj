@@ -17,6 +17,7 @@
   (syn/initialize)
   (snd/initialize)
   (mount/start)
+  (snd/create-common-group 10)
   (en/start-osc-listener {:osc-path osc-path
                           :on-received snd/send-global-pulse})
   (when osc-client (en/start-osc-client {:osc-path osc-path})))
@@ -32,3 +33,5 @@
 (intern *ns* 'stop-force #'llll.engine.engine/refresh-lines-force)
 (intern *ns* 'dump #'llll.engine.engine/dump-lines-state)
 (intern *ns* 'dump-bus #'llll.sc.sound-control/dump-control-values)
+(intern *ns* 'sound-bus #'llll.sc.sound-control/sound-bus)
+(intern *ns* 'control-bus #'llll.sc.sound-control/bus)
